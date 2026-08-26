@@ -2,10 +2,12 @@ package com.example.hidrett_app.ui.screens
 
 
 import androidx.collection.CircularArray
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,8 +26,10 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SegmentedButtonDefaults.colors
 import androidx.compose.ui.focus.FocusTargetModifierNode
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,12 +39,25 @@ import com.example.hidrett_app.ui.components.TokenVisualTransformation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.hidrett_app.ui.theme.HidrettAccent
+import com.example.hidrett_app.ui.theme.HidrettAccentMuted
+import com.example.hidrett_app.ui.theme.HidrettBackground
+import com.example.hidrett_app.ui.theme.HidrettError
+import com.example.hidrett_app.ui.theme.HidrettSurface
+import com.example.hidrett_app.ui.theme.HidrettTextPrimary
+import com.example.hidrett_app.ui.theme.HidrettTextSecondary
+import com.example.hidrett_app.ui.theme.hidrettFieldColors
+import androidx.activity.compose.BackHandler
 
 
 @Composable
 fun RecoverAccountScreen(
     navController: NavController
 ) {
+
+    BackHandler {
+        navController.popBackStack()
+    }
 
     var isVerifying by remember {
         mutableStateOf(false)
@@ -55,8 +72,9 @@ fun RecoverAccountScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(HidrettBackground)
             .padding(24.dp),
-
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -87,29 +105,50 @@ fun RecoverAccountScreen(
             }
         }
 
+        Icon(
+            imageVector = Icons.Outlined.Shield,
+            contentDescription = null,
+            tint = HidrettAccent,
+            modifier = Modifier.size(40.dp)
+        )
+
         Spacer(
-            modifier = Modifier.height(40.dp)
+            modifier = Modifier.height(12.dp)
         )
 
         Text(
             text = "HIDRETT",
             fontSize = 40.sp,
-            fontWeight = FontWeight.Bold
+            letterSpacing = 4.sp,
+            fontWeight = FontWeight.Bold,
+            color = HidrettTextPrimary
         )
+
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = "Secure Dynamic Identity",
-            fontSize = 16.sp
+            fontSize = 15.sp,
+            color = HidrettTextPrimary
         )
 
         Spacer(
-            modifier = Modifier.height(40.dp)
+            modifier = Modifier.height(6.dp)
         )
 
         Text(
+            text = "No real names. No phone numbers. Ever.",
+            fontSize = 12.sp,
+            color = HidrettAccentMuted
+        )
+
+        Spacer(modifier = Modifier.height(48.dp))
+
+        Text(
             text = "Recover Account",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = HidrettTextPrimary
         )
 
         Spacer(
@@ -118,8 +157,9 @@ fun RecoverAccountScreen(
 
         Text(
             text = "Recover access to your local account using your Activation Token.",
-            fontSize = 15.sp,
-            textAlign = TextAlign.Center
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center,
+            color = HidrettTextPrimary
         )
 
         Spacer(
@@ -199,7 +239,8 @@ fun RecoverAccountScreen(
                 }
             },
 
-            singleLine = true
+            singleLine = true,
+            colors = hidrettFieldColors()
         )
 
         Spacer(
@@ -209,7 +250,7 @@ fun RecoverAccountScreen(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFF5F8FF)
+                containerColor = HidrettSurface
             ),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 4.dp
@@ -235,7 +276,8 @@ fun RecoverAccountScreen(
                     Text(
                         text = "Recovery Information",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
+                        color = HidrettTextSecondary
                     )
                 }
 
@@ -246,7 +288,8 @@ fun RecoverAccountScreen(
                 Text(
                     text = "Your Activation Token is required to recover your local account.",
                     fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    color = HidrettTextSecondary
                 )
 
                 Spacer(
@@ -256,7 +299,8 @@ fun RecoverAccountScreen(
                 Text(
                     text = "You can view it securely anytime from your Hidrett account on our website.",
                     fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    color = HidrettTextSecondary
                 )
             }
         }
@@ -275,7 +319,7 @@ fun RecoverAccountScreen(
                 val isTokenValid = activationToken == "ABCD-1234-EFGH"
 
                 if(isTokenValid) {
-                    navController.navigate("ResetPassword")
+                    navController.navigate("Welcome")
                 } else {
                     tokenError = "Invalid Activation Token"
                     }
@@ -290,11 +334,10 @@ fun RecoverAccountScreen(
                 .height(56.dp),
 
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF2563EB),
+                containerColor = HidrettAccent,
                 contentColor = Color.White,
 
-                disabledContainerColor = Color(0xFFDCEBFF),
-                disabledContentColor = Color(0xFF6B7280)
+                disabledContainerColor = HidrettAccent.copy(alpha = 0.5f)
             )
         ) {
 

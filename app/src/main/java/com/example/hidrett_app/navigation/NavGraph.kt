@@ -6,6 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hidrett_app.ui.screens.RecoverAccountScreen
 import com.example.hidrett_app.ui.screens.LoginScreen
+import com.example.hidrett_app.ui.screens.MainScreen
+import com.example.hidrett_app.ui.screens.Routes
 import com.example.hidrett_app.ui.screens.WelcomeScreen
 
 @Composable
@@ -22,11 +24,15 @@ fun NavGraph() {
         }
 
         composable("Welcome") {
-            WelcomeScreen()
+            WelcomeScreen(navController=navController)
         }
 
-        composable("ForgotPassword?") {
+        composable(Routes.FORGOT_PASSWORD) {
             RecoverAccountScreen(navController = navController)
+        }
+
+        composable("MainScreen") {
+            MainScreen(navController = navController)
         }
     }
 

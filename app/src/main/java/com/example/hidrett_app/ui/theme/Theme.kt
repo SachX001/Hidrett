@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -56,3 +57,18 @@ fun Hidrett_AppTheme(
         content = content
     )
 }
+
+@Composable
+fun hidrettFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedTextColor = HidrettTextPrimary,
+    unfocusedTextColor = HidrettTextPrimary,
+    focusedBorderColor = HidrettAccent,
+    unfocusedBorderColor = HidrettTextSecondary,
+    focusedLabelColor = HidrettAccentMuted,
+    unfocusedLabelColor = HidrettTextSecondary,
+    cursorColor = HidrettAccent,
+    focusedLeadingIconColor = HidrettAccentMuted,
+    unfocusedLeadingIconColor = HidrettTextSecondary,
+    errorBorderColor = HidrettError,
+    errorLabelColor = HidrettError
+)
