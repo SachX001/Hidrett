@@ -1,7 +1,6 @@
 package com.example.hidrett_app.ui.screens
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -44,7 +43,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -57,9 +55,7 @@ import com.example.hidrett_app.ui.components.NotificationRow
 import com.example.hidrett_app.ui.components.NotificationTab
 import com.example.hidrett_app.ui.components.NotificationType
 import com.example.hidrett_app.ui.components.Notifications
-import com.example.hidrett_app.ui.components.PostCard
 import com.example.hidrett_app.ui.models.Post
-import com.example.hidrett_app.ui.models.VoteState
 import com.example.hidrett_app.ui.models.withVote
 import com.example.hidrett_app.ui.theme.HidrettAccent
 import com.example.hidrett_app.ui.theme.HidrettBackground
