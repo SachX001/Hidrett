@@ -59,28 +59,3 @@ fun DrawerRow(
         }
     }
 }
-
-@Composable
-fun InitialAvatar(text: String, size: Dp) {
-    val hue = text.hashCode()
-    val color = Color(
-        red = ((hue shr 16) and 0xFF) / 255f,
-        green = ((hue shr 8) and 0xFF) / 255f,
-        blue = (hue and 0xFF) / 255f,
-        alpha = 1f
-    )
-    Box(
-        modifier = Modifier
-            .size(size)
-            .clip(CircleShape)
-            .background(color.copy(alpha = 0.85f)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text.take(1).uppercase(),
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 13.sp
-        )
-    }
-}

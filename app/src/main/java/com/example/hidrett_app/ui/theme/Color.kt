@@ -16,3 +16,5 @@ val HidrettAccentMuted = Color(0xFF9B8CFF)
 val HidrettTextPrimary = Color(0xFFEDEDF2)
 val HidrettTextSecondary = Color(0xFF8A8A99)
 val HidrettError = Color(0xFFFF6B6B)
+
+val HidrettDownvoteActive = Color(0xFFFF6B6B)

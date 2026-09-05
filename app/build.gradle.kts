@@ -54,5 +54,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons.extended)
+    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
 
 }
