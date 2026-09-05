@@ -1,4 +1,4 @@
-package com.example.hidrett_app.ui.screens.main
+package com.example.hidrett_app.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.AddBox
 import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.ChatBubble
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocalFireDepartment
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hidrett_app.ui.components.DrawerRow
+import com.example.hidrett_app.ui.components.Feed
 import com.example.hidrett_app.ui.components.InitialAvatar
 import com.example.hidrett_app.ui.components.NotificationRow
 import com.example.hidrett_app.ui.components.NotificationTab
@@ -64,6 +66,7 @@ import com.example.hidrett_app.ui.theme.HidrettBackground
 import com.example.hidrett_app.ui.theme.HidrettSurface
 import com.example.hidrett_app.ui.theme.HidrettTextPrimary
 import com.example.hidrett_app.ui.theme.HidrettTextSecondary
+import com.example.hidrett_app.ui.theme.hidrettBottomNavColors
 // Adjust this if hidrettFieldColors() lives somewhere else in your theme package.
 import com.example.hidrett_app.ui.theme.hidrettFieldColors
 
@@ -74,6 +77,7 @@ private object MainRoutes {
     const val SETTINGS = "settings"
     const val CREATE_POST = "create_post"
     const val PROFILE = "profile"
+    const val CHAT = "chat"
     fun community(name: String) = "community/$name"
     fun post(id: String) = "post/$id"
 }
@@ -174,6 +178,7 @@ fun MainScreen(
     var feedPosts by remember { mutableStateOf(mockFeed()) }
     var selectedBottomTab by remember { mutableStateOf("Home") }
     var isBottomBarVisible by remember { mutableStateOf(true) }
+    var isTopBarVisible by remember { mutableStateOf(true) }
 
     val recentlyViewed = remember {
         listOf(
@@ -213,12 +218,26 @@ fun MainScreen(
         }
     }
 
+    val topBarScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (available.y < 4f) {
+                    isTopBarVisible = false
+                } else if (available.y > -4f) {
+                    isTopBarVisible = true
+                }
+                return Offset.Zero
+            }
+        }
+    }
+
     Box(modifier = modifier.fillMaxSize()) {
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(bottomBarScrollConnection)
+                .nestedScroll(topBarScrollConnection)
         ) {
 
             Row(
@@ -346,6 +365,16 @@ fun MainScreen(
                     },
                     icon = { Icon(Icons.Outlined.Person, contentDescription = "Profile") },
                     label = { Text("Profile") },
+                    colors = hidrettBottomNavColors()
+                )
+                NavigationBarItem(
+                    selected = selectedBottomTab == "Chat",
+                    onClick = {
+                        selectedBottomTab = "Chat"
+                        navController.navigate(MainRoutes.CHAT)
+                    },
+                    icon = {Icon(Icons.Outlined.ChatBubble, contentDescription = "Chat") },
+                    label = { Text("Chat") },
                     colors = hidrettBottomNavColors()
                 )
             }
@@ -591,47 +620,3 @@ fun MainScreen(
     }
 }
 
-@Composable
-private fun hidrettBottomNavColors() = NavigationBarItemDefaults.colors(
-    selectedIconColor = HidrettAccent,
-    selectedTextColor = HidrettAccent,
-    unselectedIconColor = HidrettTextSecondary,
-    unselectedTextColor = HidrettTextSecondary,
-    indicatorColor = HidrettBackground
-)
-
-@Composable
-private fun Feed(
-    posts: List<Post>,
-    onVote: (postId: String, tapped: VoteState) -> Unit,
-    onToggleSave: (postId: String) -> Unit,
-    onOpenPost: (postId: String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
-
-    LazyColumn(
-        modifier = modifier.background(HidrettBackground),
-        // Extra bottom padding reserves room so the last post isn't hidden
-        // behind the floating bottom nav bar.
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 96.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(posts, key = { it.id }) { post ->
-            PostCard(
-                post = post,
-                onVote = { tapped -> onVote(post.id, tapped) },
-                onToggleSave = { onToggleSave(post.id) },
-                onOpenPost = { onOpenPost(post.id) },
-                onShare = {
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        // Post-ID only — carries no identity of who is sharing it.
-                        putExtra(Intent.EXTRA_TEXT, "https://hidrett.app/post/${post.id}")
-                    }
-                    context.startActivity(Intent.createChooser(shareIntent, "Share post"))
-                }
-            )
-        }
-    }
-}

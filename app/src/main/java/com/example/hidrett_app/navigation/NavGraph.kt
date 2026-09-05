@@ -6,9 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hidrett_app.ui.screens.RecoverAccountScreen
 import com.example.hidrett_app.ui.screens.LoginScreen
+import com.example.hidrett_app.ui.screens.MainScreen
 import com.example.hidrett_app.ui.screens.Routes
 import com.example.hidrett_app.ui.screens.WelcomeScreen
-import com.example.hidrett_app.ui.screens.main.MainScreen
 
 @Composable
 fun NavGraph() {

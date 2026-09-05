@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -71,4 +72,13 @@ fun hidrettFieldColors() = OutlinedTextFieldDefaults.colors(
     unfocusedLeadingIconColor = HidrettTextSecondary,
     errorBorderColor = HidrettError,
     errorLabelColor = HidrettError
+)
+
+@Composable
+fun hidrettBottomNavColors() = NavigationBarItemDefaults.colors(
+    selectedIconColor = HidrettAccent,
+    selectedTextColor = HidrettAccent,
+    unselectedIconColor = HidrettTextSecondary,
+    unselectedTextColor = HidrettTextSecondary,
+    indicatorColor = HidrettBackground
 )
