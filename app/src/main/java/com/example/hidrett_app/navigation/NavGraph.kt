@@ -24,7 +24,17 @@ fun NavGraph() {
         }
 
         composable("Welcome") {
-            WelcomeScreen(navController=navController)
+            WelcomeScreen(
+                navController = navController,
+                holdMillis = 1000,
+                onRevealFinished = {
+                    navController.navigate("MainScreen") {
+                        popUpTo("Welcome") {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         composable(Routes.FORGOT_PASSWORD) {

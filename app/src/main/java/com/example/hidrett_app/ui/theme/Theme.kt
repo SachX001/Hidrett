@@ -63,13 +63,24 @@ fun Hidrett_AppTheme(
 fun hidrettFieldColors() = OutlinedTextFieldDefaults.colors(
     focusedTextColor = HidrettTextPrimary,
     unfocusedTextColor = HidrettTextPrimary,
+
+    focusedContainerColor = HidrettSurface,
+    unfocusedContainerColor = HidrettSurface,
+
     focusedBorderColor = HidrettAccent,
-    unfocusedBorderColor = HidrettTextSecondary,
+    unfocusedBorderColor = HidrettTextSecondary.copy(alpha = 0.25f),
+
     focusedLabelColor = HidrettAccentMuted,
     unfocusedLabelColor = HidrettTextSecondary,
+
+    focusedTrailingIconColor = HidrettTextSecondary,
+    unfocusedTrailingIconColor = HidrettTextSecondary,
+
     cursorColor = HidrettAccent,
+
     focusedLeadingIconColor = HidrettAccentMuted,
     unfocusedLeadingIconColor = HidrettTextSecondary,
+
     errorBorderColor = HidrettError,
     errorLabelColor = HidrettError
 )

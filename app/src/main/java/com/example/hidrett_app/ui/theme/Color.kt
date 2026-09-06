@@ -9,11 +9,14 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val HidrettBackground = Color(0xFF0B0B0F)
-val HidrettSurface = Color(0xFF16161D)
-val HidrettAccent = Color(0xFF7C5CFC)      // muted violet, not a "trustworthy blue"
-val HidrettAccentMuted = Color(0xFF9B8CFF)
-val HidrettTextPrimary = Color(0xFFEDEDF2)
-val HidrettTextSecondary = Color(0xFF8A8A99)
+val HidrettBackground = Color(0xFF08090E)
+val HidrettSurface = Color(0xFF151821)
+
+val HidrettAccent = Color(0xFF7B5CFF)
+val HidrettAccentMuted = Color(0xFFA594FF)
+
+val HidrettTextPrimary = Color(0xFFF1F1F5)
+val HidrettTextSecondary = Color(0xFF8B8D9A)
+
 val HidrettError = Color(0xFFFF6B6B)
 

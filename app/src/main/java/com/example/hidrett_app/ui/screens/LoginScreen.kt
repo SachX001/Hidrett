@@ -1,7 +1,9 @@
 package com.example.hidrett_app.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -14,7 +16,10 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode.Companion.Plus
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -29,36 +34,23 @@ import com.example.hidrett_app.ui.theme.HidrettError
 import com.example.hidrett_app.ui.theme.HidrettSurface
 import com.example.hidrett_app.ui.theme.HidrettTextPrimary
 import com.example.hidrett_app.ui.theme.HidrettTextSecondary
+import com.example.hidrett_app.R
+import com.example.hidrett_app.ui.theme.PlusJakartaSans
+import com.example.hidrett_app.ui.theme.hidrettFieldColors
 
-/**
- * Centralized routes to avoid typo-prone string literals scattered across composables.
- * (Move this to its own Routes.kt once the nav graph grows.)
- */
+
 object Routes {
     const val WELCOME = "welcome"
     const val FORGOT_PASSWORD = "Forgot Passphrase?"
 }
-
-// Dark, low-signature palette — deliberately avoids anything "social app" bright/friendly,
-// leans toward the "encrypted terminal" register instead.
-private val HidrettBackground = Color(0xFF0B0B0F)
-private val HidrettSurface = Color(0xFF16161D)
-private val HidrettAccent = Color(0xFF7C5CFC)      // muted violet, not a "trustworthy blue"
-private val HidrettAccentMuted = Color(0xFF9B8CFF)
-private val HidrettTextPrimary = Color(0xFFEDEDF2)
-private val HidrettTextSecondary = Color(0xFF8A8A99)
-private val HidrettError = Color(0xFFFF6B6B)
 
 @Composable
 fun LoginScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    // Handle survives rotation — it's not sensitive on its own.
     var handle by rememberSaveable { mutableStateOf("") }
 
-    // Passphrase intentionally does NOT use rememberSaveable: we don't want plaintext
-    // credentials surviving process death in the saved-instance-state bundle, even briefly.
     var passphrase by remember { mutableStateOf("") }
 
     var handleError by remember { mutableStateOf("") }
@@ -70,47 +62,41 @@ fun LoginScreen(
         modifier = modifier
             .fillMaxSize()
             .background(HidrettBackground)
-            .padding(horizontal = 32.dp, vertical = 56.dp),
+            .padding(horizontal = 32.dp, vertical = 32.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Icon(
-            imageVector = Icons.Outlined.Shield,
-            contentDescription = null,
-            tint = HidrettAccent,
-            modifier = Modifier.size(40.dp)
+        Image(
+            painter = painterResource(R.drawable.hidrett_icon),
+            contentDescription = "Hidrett logo",
+            modifier = Modifier.size(80.dp)
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         Text(
-            text = "HIDRETT",
+            text = "Hidrett",
             fontSize = 40.sp,
-            fontWeight = FontWeight.ExtraBold,
+            fontWeight = FontWeight.Bold,
+            fontFamily = PlusJakartaSans,
             color = HidrettTextPrimary,
-            letterSpacing = 4.sp
+            letterSpacing = 1.sp
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Text(
-            text = "Secure Dynamic Identity",
+            text = "Real conversations beyond identities",
             fontSize = 15.sp,
+            fontFamily = PlusJakartaSans,
+            fontWeight = FontWeight.Normal,
             color = HidrettTextSecondary
         )
 
-        Spacer(modifier = Modifier.height(6.dp))
-
-        Text(
-            text = "No real names. No phone numbers. Ever.",
-            fontSize = 12.sp,
-            color = HidrettAccentMuted
-        )
-
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             value = handle,
@@ -125,17 +111,25 @@ fun LoginScreen(
             supportingText = {
                 if (handleError.isNotEmpty()) Text(handleError, color = HidrettError)
             },
-            label = { Text("Anonymous Handle") },
+            placeholder = {
+                Text(
+                    text = "Anonymous  Handle",
+                    fontFamily = PlusJakartaSans,
+                    fontWeight = FontWeight.Normal
+                )
+            },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 autoCorrectEnabled = false
             ),
             colors = hidrettFieldColors(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(5.dp))
 
         OutlinedTextField(
             value = passphrase,
@@ -159,7 +153,13 @@ fun LoginScreen(
             supportingText = {
                 if (passphraseError.isNotEmpty()) Text(passphraseError, color = HidrettError)
             },
-            label = { Text("Passphrase") },
+            placeholder = {
+                Text(
+                    text = "Passphrase",
+                    fontFamily = PlusJakartaSans,
+                    fontWeight = FontWeight.Normal
+                )
+            },
             singleLine = true,
             visualTransformation = if (passphraseVisible) VisualTransformation.None
             else PasswordVisualTransformation(),
@@ -168,7 +168,9 @@ fun LoginScreen(
                 autoCorrectEnabled = false
             ),
             colors = hidrettFieldColors(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
         )
 
         Spacer(modifier = Modifier.height(28.dp))
@@ -195,7 +197,8 @@ fun LoginScreen(
                 containerColor = HidrettAccent,
                 contentColor = Color.White,
                 disabledContainerColor = HidrettAccent.copy(alpha = 0.5f)
-            )
+            ),
+            shape = RoundedCornerShape(28.dp)
         ) {
             if (isAuthenticating) {
                 CircularProgressIndicator(
@@ -207,6 +210,7 @@ fun LoginScreen(
                 Text(
                     text = "ENTER ANONYMOUSLY",
                     fontSize = 16.sp,
+                    fontFamily = PlusJakartaSans,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
                 )
@@ -215,26 +219,12 @@ fun LoginScreen(
 
         TextButton(onClick = { navController.navigate(Routes.FORGOT_PASSWORD) }) {
             Text(
-                text = "Forgot Passphrase?",
-                color = HidrettAccentMuted,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                text = "Forgot  Passphrase?",
+                color = HidrettAccent,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
+                fontFamily = PlusJakartaSans
             )
         }
     }
 }
-
-@Composable
-private fun hidrettFieldColors() = OutlinedTextFieldDefaults.colors(
-    focusedTextColor = HidrettTextPrimary,
-    unfocusedTextColor = HidrettTextPrimary,
-    focusedBorderColor = HidrettAccent,
-    unfocusedBorderColor = HidrettTextSecondary,
-    focusedLabelColor = HidrettAccentMuted,
-    unfocusedLabelColor = HidrettTextSecondary,
-    cursorColor = HidrettAccent,
-    focusedLeadingIconColor = HidrettAccentMuted,
-    unfocusedLeadingIconColor = HidrettTextSecondary,
-    errorBorderColor = HidrettError,
-    errorLabelColor = HidrettError
-)

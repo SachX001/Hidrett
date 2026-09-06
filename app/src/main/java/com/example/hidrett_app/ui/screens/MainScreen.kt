@@ -10,6 +10,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,12 +38,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -65,8 +68,10 @@ import com.example.hidrett_app.ui.theme.HidrettTextSecondary
 import com.example.hidrett_app.ui.theme.hidrettBottomNavColors
 // Adjust this if hidrettFieldColors() lives somewhere else in your theme package.
 import com.example.hidrett_app.ui.theme.hidrettFieldColors
+import com.example.hidrett_app.R
+import com.example.hidrett_app.ui.theme.PlusJakartaSans
 
-private object MainRoutes {
+object MainRoutes {
     const val POPULAR_COMMUNITIES = "popular_communities"
     const val START_COMMUNITY = "start_community"
     const val DISCOVER_COMMUNITIES = "discover_communities"
@@ -228,7 +233,6 @@ fun MainScreen(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -236,74 +240,102 @@ fun MainScreen(
                 .nestedScroll(topBarScrollConnection)
         ) {
 
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(HidrettBackground)
-                    .padding(horizontal = 32.dp, vertical = 40.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(horizontal = 16.dp, vertical = 18.dp)
             ) {
-                IconButton(onClick = {
-                    isDrawerOpen = true
-                    isNotificationsOpen = false
-                }) {
-                    Icon(
-                        imageVector = Icons.Outlined.ViewHeadline,
-                        contentDescription = "Open menu",
-                        tint = HidrettAccent,
-                        modifier = Modifier.size(25.dp)
-                    )
-                }
 
-                Spacer(modifier = Modifier.width(24.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    leadingIcon = {
-                        Box(
-                            modifier = Modifier
-                                .background(HidrettAccent, CircleShape)
-                                .size(32.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    IconButton(
+                        onClick = {
+                            isDrawerOpen = true
+                            isNotificationsOpen = false
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ViewHeadline,
+                            contentDescription = "Open menu",
+                            tint = HidrettAccent,
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        leadingIcon = {
                             Icon(
                                 Icons.Outlined.Search,
-                                contentDescription = "Search Hidrett",
-                                tint = HidrettTextPrimary
+                                contentDescription = "Search Hidrett"
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                text = "Search Hidrett",
+                                fontFamily = PlusJakartaSans
+                            )
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = HidrettSurface,
+                            unfocusedContainerColor = HidrettSurface,
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent,
+                            focusedTextColor = HidrettTextPrimary,
+                            unfocusedTextColor = HidrettTextPrimary,
+                            cursorColor = HidrettAccent,
+                            focusedLeadingIconColor = HidrettTextSecondary,
+                            unfocusedLeadingIconColor = HidrettTextSecondary
+                        ),
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Search
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onSearch = {
+                                val query = searchQuery.trim()
+                                if (query.isNotEmpty()) {
+                                    navController.navigate("search/$query")
+                                }
+                            }
+                        ),
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(50.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    IconButton(
+                        onClick = {
+                            isNotificationsOpen = true
+                            isDrawerOpen = false
+                        }
+                    ) {
+                        val hasUnread = notifications.any { !it.isRead }
+
+                        BadgedBox(
+                            badge = {
+                                if (hasUnread) {
+                                    Badge(containerColor = HidrettAccent)
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Notifications,
+                                contentDescription = "Notifications",
+                                tint = HidrettAccent,
+                                modifier = Modifier.size(32.dp)
                             )
                         }
-                    },
-                    label = { Text("Search Hidrett") },
-                    colors = hidrettFieldColors(),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            val query = searchQuery.trim()
-                            if (query.isNotEmpty()) navController.navigate("search/$query")
-                        }
-                    ),
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(50.dp)
-                )
-
-                Spacer(modifier = Modifier.width(24.dp))
-
-                IconButton(onClick = {
-                    isNotificationsOpen = true
-                    isDrawerOpen = false
-                }) {
-                    val hasUnread = notifications.any { !it.isRead }
-                    BadgedBox(badge = {
-                        if (hasUnread) Badge(containerColor = HidrettAccent)
-                    }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Notifications,
-                            contentDescription = "Notifications",
-                            tint = HidrettAccent,
-                            modifier = Modifier.size(32.dp)
-                        )
                     }
                 }
             }
